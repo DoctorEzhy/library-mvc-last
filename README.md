@@ -1,7 +1,6 @@
 # library-mvc-security
 
 Итоговый учебный проект «Каталог книг»: Spring Boot + Spring MVC + Thymeleaf + Spring Data JPA (MySQL) + Spring Security (HTTP Basic, пользователи в таблице БД).
-Java 17, Spring Boot 3.3, Maven.
 
 ## База данных
 
