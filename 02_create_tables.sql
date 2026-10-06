@@ -1,0 +1,72 @@
+USE library_db;
+
+DROP TABLE IF EXISTS books;
+DROP TABLE IF EXISTS authors;
+DROP TABLE IF EXISTS genres;
+
+CREATE TABLE genres (
+    id   BIGINT      NOT NULL AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    CONSTRAINT pk_genres      PRIMARY KEY (id),
+    CONSTRAINT uq_genres_name UNIQUE (name)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+CREATE TABLE authors (
+    id   BIGINT      NOT NULL AUTO_INCREMENT,
+    name VARCHAR(60) NOT NULL,
+    CONSTRAINT pk_authors      PRIMARY KEY (id),
+    CONSTRAINT uq_authors_name UNIQUE (name)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+
+CREATE TABLE books (
+    id               BIGINT       NOT NULL AUTO_INCREMENT,
+    title            VARCHAR(100) NOT NULL,
+    author_id        BIGINT       NOT NULL,
+    genre_id         BIGINT       NOT NULL,
+    publication_year INT          NOT NULL,
+    description      VARCHAR(500) NULL,
+    CONSTRAINT pk_books PRIMARY KEY (id),
+
+    INDEX idx_books_author_id (author_id),
+    INDEX idx_books_genre_id  (genre_id),
+
+    CONSTRAINT fk_books_author FOREIGN KEY (author_id)
+        REFERENCES authors (id) ON DELETE RESTRICT,
+
+    CONSTRAINT fk_books_genre FOREIGN KEY (genre_id)
+        REFERENCES genres (id) ON DELETE RESTRICT,
+
+    CONSTRAINT ck_books_year CHECK (publication_year BETWEEN 1450 AND 2100)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+INSERT INTO genres (name) VALUES
+    ('Роман'),
+    ('Повесть'),
+    ('Фантастика'),
+    ('Детектив'),
+    ('Поэзия'),
+    ('Научная литература');
+
+INSERT INTO authors (name) VALUES
+    ('Михаил Булгаков'),
+    ('Фёдор Достоевский'),
+    ('Лев Толстой');
+
+INSERT INTO books (title, author_id, genre_id, publication_year, description) VALUES
+    ('Мастер и Маргарита',
+        (SELECT id FROM authors WHERE name = 'Михаил Булгаков'),
+        (SELECT id FROM genres  WHERE name = 'Роман'),
+        1967, 'Роман о визите дьявола в Москву 1930-х годов.'),
+    ('Преступление и наказание',
+        (SELECT id FROM authors WHERE name = 'Фёдор Достоевский'),
+        (SELECT id FROM genres  WHERE name = 'Роман'),
+        1866, 'Роман о студенте Раскольникове и цене его теории.'),
+    ('Война и мир',
+        (SELECT id FROM authors WHERE name = 'Лев Толстой'),
+        (SELECT id FROM genres  WHERE name = 'Роман'),
+        1869, 'Роман-эпопея о русском обществе эпохи наполеоновских войн.'),
+    ('Идиот',
+        (SELECT id FROM authors WHERE name = 'Фёдор Достоевский'),
+        (SELECT id FROM genres  WHERE name = 'Роман'),
+        1869, NULL);

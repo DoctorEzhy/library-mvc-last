@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="~{fragments/layout :: head('Доступ запрещён')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container center">
+    <h1>403</h1>
+    <p>Доступ запрещён: это действие доступно только администратору.</p>
+    <a class="btn btn-primary" th:href="@{/books}">К списку книг</a>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

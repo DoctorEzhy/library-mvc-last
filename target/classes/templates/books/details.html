@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
+<head th:replace="~{fragments/layout :: head('Книга')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <h1 th:text="${book.title}">Название</h1>
+
+    <dl class="details">
+        <dt>Автор</dt>
+        <dd th:text="${book.author}">Автор</dd>
+        <dt>Жанр</dt>
+        <dd th:text="${book.genreName}">Жанр</dd>
+        <dt>Год издания</dt>
+        <dd th:text="${book.year}">2000</dd>
+        <dt>Описание</dt>
+        <dd th:text="${#strings.isEmpty(book.description)} ? 'Описание не указано' : ${book.description}">Описание</dd>
+    </dl>
+
+    <p>
+        <a class="btn btn-primary" sec:authorize="hasRole('ADMIN')" th:href="@{/books/{id}/edit(id=${book.id})}">Изменить</a>
+        <a class="btn" th:href="@{/books}">Назад к списку</a>
+    </p>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

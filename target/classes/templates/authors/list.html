@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="~{fragments/layout :: head('Авторы')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container">
+    <h1>Авторы</h1>
+
+    <p class="muted" th:if="${#maps.isEmpty(authors)}">Авторов пока нет.</p>
+
+    <table th:unless="${#maps.isEmpty(authors)}">
+        <thead>
+        <tr><th>Автор</th><th>Книг в каталоге</th><th></th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry : ${authors}">
+            <td th:text="${entry.key}">Автор</td>
+            <td th:text="${entry.value}">1</td>
+            <td><a class="btn btn-sm" th:href="@{/books(q=${entry.key})}">Показать книги</a></td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

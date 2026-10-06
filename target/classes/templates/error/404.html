@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="~{fragments/layout :: head('Ошибка 404')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container center">
+    <h1>404</h1>
+    <p th:text="${#strings.isEmpty(message)} ? 'Запрошенная страница не найдена.' : ${message}">Страница не найдена</p>
+    <a class="btn btn-primary" th:href="@{/}">На главную</a>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

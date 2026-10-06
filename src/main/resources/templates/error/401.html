@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="~{fragments/layout :: head('Требуется вход')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+
+<main class="container center">
+    <h1>401</h1>
+    <p>Для этой страницы нужно войти: введите логин и пароль в окне браузера.</p>
+    <p>Обновите страницу (F5), чтобы окно появилось снова.</p>
+    <a class="btn" th:href="@{/}">На главную</a>
+    <a class="btn btn-primary" th:href="@{/register}">Регистрация</a>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
