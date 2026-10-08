@@ -16,11 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-/**
- * Service - бизнес-логика. Превращает данные формы (Book) в сущности БД и обратно.
- * @Transactional - все операции метода выполняются в одной транзакции БД:
- * либо применяются целиком, либо при ошибке откатываются.
- */
 @Service
 public class BookService {
 
@@ -42,7 +37,6 @@ public class BookService {
         return bookRepository.findAllByOrderByIdAsc().stream().map(this::toModel).toList();
     }
 
-    /** Поиск по части названия или автора без учёта регистра. Пустой запрос - все книги. */
     @Transactional(readOnly = true)
     public List<Book> search(String query) {
         if (query == null || query.isBlank()) {
@@ -70,7 +64,7 @@ public class BookService {
         AuthorEntity oldAuthor = entity.getAuthor();
         applyForm(entity, form);
         bookRepository.saveAndFlush(entity);
-        removeAuthorIfUnused(oldAuthor); // автор мог смениться
+        removeAuthorIfUnused(oldAuthor);
         return toModel(entity);
     }
 
@@ -88,7 +82,6 @@ public class BookService {
         return bookRepository.count();
     }
 
-    /** Автор -> количество его книг (в алфавитном порядке). */
     @Transactional(readOnly = true)
     public Map<String, Long> countBooksByAuthor() {
         Map<String, Long> result = new TreeMap<>();
@@ -98,19 +91,15 @@ public class BookService {
         return result;
     }
 
-    /** Жанры для выпадающего списка в форме. */
     @Transactional(readOnly = true)
     public List<GenreEntity> findAllGenres() {
         return genreRepository.findAllByOrderByNameAsc();
     }
 
-    // ---------- вспомогательные методы ----------
-
     private BookEntity findEntity(Long id) {
         return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
     }
 
-    /** Переносит данные формы в сущность. Автор ищется по имени, а если его нет - создаётся. */
     private void applyForm(BookEntity entity, Book form) {
         entity.setTitle(form.getTitle().trim());
         entity.setYear(form.getYear());
@@ -126,7 +115,6 @@ public class BookService {
                 .orElseGet(() -> authorRepository.save(new AuthorEntity(name)));
     }
 
-    /** Если у автора не осталось книг, удаляем его из таблицы authors. */
     private void removeAuthorIfUnused(AuthorEntity author) {
         if (!bookRepository.existsByAuthor(author)) {
             authorRepository.delete(author);
