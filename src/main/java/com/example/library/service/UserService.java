@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Бизнес-логика пользователей: регистрация с шифрованием пароля. */
 @Service
 public class UserService {
 
@@ -25,7 +24,6 @@ public class UserService {
         return userRepository.existsByUsername(username);
     }
 
-    /** Сохраняет пользователя; пароль превращается в BCrypt-хеш. */
     @Transactional
     public UserEntity register(String username, String rawPassword, String role) {
         UserEntity user = new UserEntity(username.trim(), passwordEncoder.encode(rawPassword), role);
